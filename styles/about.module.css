@@ -1,0 +1,42 @@
+/* the message container */
+.msg {
+  display: flex;
+  padding: 15px;
+}
+/* message profile picture container */
+.msgPfp {
+  border-radius: 50%;
+}
+/* message container */
+.msgText {
+  padding: 0 1rem;
+}
+/* message time stamp */
+#msgTime {
+  color: rgb(148, 155, 164);
+  font-size: 0.7rem;
+}
+/* message display name */
+#msgTime span {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #eee;
+  margin-right: 0.3rem;
+}
+/* the messages */
+/* important highlights */
+.msgText b {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+/* normal */
+.msgText span {
+  line-height: 1.7rem;
+  font-size: 0.9rem;
+}
+
+/* the about paragraph */
+.aboutParagraph {
+  padding: 0 30px;
+  font-size: 0.85rem;
+}

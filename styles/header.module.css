@@ -1,0 +1,44 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem;
+  padding: 15px;
+  background-color: black;
+  border-bottom: 1px #6c6c6cee solid;
+}
+.nav ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+.nav li {
+  margin: 0 3rem;
+}
+
+#settingsButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+#settingsButton:active {
+  scale: 0.9;
+  transition: all ease-in-out 500ms;
+}
+
+#settingsButton:hover {
+  opacity: 0.8;
+  transition: all ease-in 100ms;
+}
