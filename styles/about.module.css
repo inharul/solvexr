@@ -1,7 +1,8 @@
 /* the message container */
 .msg {
   display: flex;
-  padding: 15px;
+  justify-content: center;
+  padding: 2rem;
 }
 /* message profile picture container */
 .msgPfp {
@@ -37,6 +38,6 @@
 
 /* the about paragraph */
 .aboutParagraph {
-  padding: 0 30px;
+  padding: 0 3rem;
   font-size: 0.85rem;
 }

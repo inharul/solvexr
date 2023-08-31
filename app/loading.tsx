@@ -1,11 +1,10 @@
 import React from "react";
-import Image from "next/image";
-import loader from "@/public/loader.svg";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 function Loading() {
   return (
     <div>
-      <Image src={loader} alt="loader" id="loader" />
+      <CircularProgress variant="soft" />
     </div>
   );
 }

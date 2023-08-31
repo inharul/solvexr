@@ -4,14 +4,9 @@
   /* width: 100%; */
 }
 
-.sidebar {
-  flex: 0.23;
-  height: 100%;
-  border-right: 1px #6c6c6cee solid;
-  /* background-color: #1e1e1e; */
-}
-
 .main {
-  flex: 0.77;
-  height: 100%;
+  /* flex: 0.77; */
+  width: 100vw;
+  display: flex;
+  justify-content: center;
 }

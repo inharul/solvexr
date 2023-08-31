@@ -77,6 +77,7 @@ function About() {
           officially and the chances of me being able to take one will be hard
           if I kept being like this. Maybe A was right and I hold it to my heart
           even if it hurt first time. I need to remember these words and work on
+          myself. A can't live forever with me, so I have to take care of
           myself.
         </p>
       </div>

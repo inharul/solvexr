@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import styles from "../styles/app.module.css";
 import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
+import { AnswerProvider } from "@/store/answers";
+import { StorageProvider } from "@/store/storage";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "SolveR",
@@ -22,8 +23,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <Header />
         <div className={styles.app}>
-          <Sidebar />
-          <main className={styles.main}>{children}</main>
+          {/* <Sidebar /> */}
+          <AnswerProvider>
+            <StorageProvider>
+              <main className={styles.main}>{children}</main>
+            </StorageProvider>
+          </AnswerProvider>
         </div>
       </body>
     </html>
