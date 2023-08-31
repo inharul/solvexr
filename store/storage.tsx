@@ -15,6 +15,7 @@ export type StorageContext = {
   changeRanges: (number: number, newValue: string) => void;
   operations: Operations;
   changeOperations: (element: string, newState: boolean) => void;
+  getOperation: () => string;
 };
 
 export const storageContext = createContext<StorageContext | null>(null);
@@ -41,7 +42,29 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
       division: false,
     }
   );
-  console.log(Object.keys(operations).filter((key) => operations[key]));
+
+  const getOperation = (): string => {
+    const newOperations = Object.keys(operations).filter(
+      (key) => operations[key]
+    );
+    const randomIndex = Math.floor(Math.random() * newOperations.length);
+    const randomKey = newOperations[randomIndex];
+
+    switch (randomKey) {
+      // return the corresponding symbol for each case
+      case "addition":
+        return "+";
+      case "substraction":
+        return "-";
+      case "multiplication":
+        return "*";
+      case "division":
+        return "/";
+      // use the default case to handle any invalid or unknown input
+      default:
+        return "!er"; // or return "Invalid input" or throw an error
+    }
+  };
 
   const changeStorage = (key: string, value: string) => {
     if (key == "timeControl") {
@@ -75,6 +98,7 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
         changeRanges,
         operations,
         changeOperations,
+        getOperation,
       }}
     >
       {children}

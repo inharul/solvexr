@@ -32,7 +32,7 @@ export const AnswersContainer = styled.div`
   border-radius: 10px;
 `;
 
-export const SideTopBar = styled.div<SideTopBarProps>`
+export const SideTopBar = styled.div`
   padding: 0.3rem;
   display: flex;
   justify-content: center;
@@ -49,15 +49,11 @@ export const SideTopBar = styled.div<SideTopBarProps>`
   }
 `;
 
-interface SideTopBarProps {
-  bg?: string;
-}
-export const SideCounts = styled.i<SideTopBarProps>`
+export const SideCounts = styled.i`
   font-style: normal;
   margin: 0 2px;
   font-weight: bold;
   color: #fff;
-  background-color: ${(props) => props?.bg};
   padding: 0 6px;
   border-radius: 5px;
 `;
@@ -116,7 +112,7 @@ export const CalcSum = styled.div`
     bottom: 0;
     left: 0;
     color: var(--border-color);
-    font-size: 2rem;
+    font-size: 3rem;
   }
   h1 {
     font-size: 4rem;

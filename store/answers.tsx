@@ -16,6 +16,7 @@ export type AnswerContext = {
     userAnswer: string,
     timeTaken: number
   ) => void;
+  emptyAnswer: () => void;
 };
 export const answerContext = createContext<AnswerContext | null>(null);
 
@@ -40,9 +41,14 @@ export const AnswerProvider = ({ children }: { children: ReactNode }) => {
       return newUserAnswer;
     });
   };
+  const emptyAnswer = () => {
+    setAnswersList([]);
+  };
   return (
     // @ts-ignore
-    <answerContext.Provider value={{ answersList, handleAddAnswer }}>
+    <answerContext.Provider
+      value={{ answersList, handleAddAnswer, emptyAnswer }}
+    >
       {children}
     </answerContext.Provider>
   );

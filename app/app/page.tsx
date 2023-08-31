@@ -14,6 +14,7 @@ import {
   Sidebar,
 } from "@/styles/AppStyle";
 import React, { useState, useEffect, FormEvent, useRef } from "react";
+import FinishModal from "@/components/FinishModal";
 import { useAnswers } from "@/store/answers";
 import { useStorage } from "@/store/storage";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -25,9 +26,11 @@ import error from "@/public/error.svg";
 import dynamic from "next/dynamic";
 
 const App = () => {
-  const { answersList, handleAddAnswer } = useAnswers();
-  const { timeControl, numberOneRange, numberTwoRange } = useStorage();
+  const { answersList, handleAddAnswer, emptyAnswer } = useAnswers();
+  const { timeControl, numberOneRange, numberTwoRange, getOperation } =
+    useStorage();
 
+  const [operation, setOperation] = useState<string>(getOperation());
   const [correctCount, setCorrectCount] = useState(0);
   const [wrongCount, setWrongCount] = useState(0);
 
@@ -47,7 +50,7 @@ const App = () => {
   );
 
   //Answer
-  const [userAnswer, setUserAnswer] = useState<string | number>("");
+  const [userAnswer, setUserAnswer] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -69,23 +72,36 @@ const App = () => {
     }
   }, [clock]);
 
-  const formatTime = (totalSeconds: number) => {
+  const formatTime = (totalSeconds: number): string => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const formatOperation = (op: string): string => {
+    if (op == "*") {
+      return "×";
+    } else if (op == "/") {
+      return "÷";
+    }
+    return op;
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (userAnswer === "") {
+    if (userAnswer === "" || userAnswer.toString().length > 11) {
       return;
     }
     setIsRunning(false);
 
-    const isCorrect = eval(`${numberOne} * ${numberTwo}`) == userAnswer;
+    const getAnswer = eval(`${numberOne} ${operation} ${numberTwo}`).toFixed(2);
+    const isCorrect = getAnswer == parseFloat(userAnswer);
+
     handleAddAnswer(
       isCorrect,
-      `${numberOne} x ${numberTwo} -> ${userAnswer}`,
+      `${numberOne} ${formatOperation(
+        operation
+      )} ${numberTwo} -> ${userAnswer}`,
       time
     );
 
@@ -96,6 +112,7 @@ const App = () => {
     setTime(0);
 
     setNumberOne(RandomNumber(1, numberOneRange));
+    setOperation(getOperation());
     setNumberTwo(RandomNumber(1, numberTwoRange));
 
     setUserAnswer("");
@@ -104,8 +121,28 @@ const App = () => {
     setIsRunning(true);
   };
 
+  const resetApp = () => {
+    emptyAnswer();
+    setClock(parseInt(timeControl) * 60);
+    setTime(0);
+    setUserAnswer("");
+    setCorrectCount(0);
+    setWrongCount(0);
+    setIsRunning(true);
+  };
+
   return (
     <AppContainer>
+      {clock === 0 ? (
+        <FinishModal
+          correctCount={correctCount}
+          wrongCount={wrongCount}
+          answersList={answersList}
+          resetApp={resetApp}
+        />
+      ) : (
+        <></>
+      )}
       <Sidebar>
         <ClockTimer>
           <div style={{ width: 30, height: 30 }}>
@@ -126,8 +163,12 @@ const App = () => {
           <AnswersContainer>
             <SideTopBar>
               <p>Answers</p>{" "}
-              <SideCounts bg="#62a941">{correctCount}</SideCounts>
-              <SideCounts bg="#a63e3e">{wrongCount}</SideCounts>
+              <SideCounts style={{ backgroundColor: "#62a941" }}>
+                {correctCount}
+              </SideCounts>
+              <SideCounts style={{ backgroundColor: "#a63e3e" }}>
+                {wrongCount}
+              </SideCounts>
               <b>/ {answersList.length}</b>
             </SideTopBar>
             {answersList.map((answers) => (
@@ -159,7 +200,7 @@ const App = () => {
         <CalcForm>
           <div>
             <CalcSum>
-              <h2>{"x"}</h2>
+              <h2>{formatOperation(operation)}</h2>
               <div style={{ textAlign: "right" }}>
                 <h1>{numberOne}</h1>
 
@@ -180,7 +221,7 @@ const App = () => {
                 }
               }}
               disabled={clock === 0}
-            ></CalcAnswer>
+            />
           </div>
         </CalcForm>
       </Main>

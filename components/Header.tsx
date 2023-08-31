@@ -7,9 +7,14 @@ import solver from "../public/solver.svg";
 
 const Header = () => {
   return (
-    <header style={{ position: "sticky", top: 0 }}>
+    <header style={{ position: "sticky", top: 0, zIndex: 1000 }}>
       <nav className={styles.nav}>
-        <Image src={solver} alt="icon" style={{ width: 60, height: 60 }} />
+        <Image
+          src={solver}
+          alt="icon"
+          style={{ width: 60, height: 60 }}
+          priority
+        />
         <ul>
           <li>
             <Link href="/">Home</Link>
