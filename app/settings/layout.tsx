@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { useRouter } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "SolveR - Settings",
+  title: "SolvexR - Settings",
+  description:
+    "Change the time pressure, select operations you want to practice in the session as well as the digits of the numbers involved in the calculations",
 };
 export default function SettingsLayout({
   children,

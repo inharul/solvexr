@@ -1,12 +1,13 @@
 import React from "react";
 import CircularProgress from "@mui/joy/CircularProgress";
+import { Box } from "@mui/joy";
 
-function Loading() {
+const Loading = () => {
   return (
-    <div>
+    <Box marginTop={5} paddingX={5}>
       <CircularProgress variant="soft" />
-    </div>
+    </Box>
   );
-}
+};
 
 export default Loading;

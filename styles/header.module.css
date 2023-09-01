@@ -22,7 +22,11 @@
   list-style: none;
 }
 .nav li {
-  margin: 0 3rem;
+  margin: 0 1.7rem;
+  font-size: 15px;
+}
+.nav li:hover {
+  text-decoration: underline;
 }
 
 #settingsButton {

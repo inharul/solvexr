@@ -3,24 +3,24 @@ import React from "react";
 import Image from "next/image";
 import styles from "../styles/header.module.css";
 import settings from "../public/settings.svg";
-import solver from "../public/solver.svg";
+import solvexr from "../public/solvexr.svg";
 
 const Header = () => {
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 1000 }}>
       <nav className={styles.nav}>
         <Image
-          src={solver}
+          src={solvexr}
           alt="icon"
           style={{ width: 60, height: 60 }}
           priority
         />
         <ul>
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/">/home</Link>
           </li>
           <li>
-            <Link href="/about">About</Link>
+            <Link href="/about">/about</Link>
           </li>
         </ul>
         <Link id={styles.settingsButton} href="/settings">

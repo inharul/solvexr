@@ -72,6 +72,10 @@ const App = () => {
     }
   }, [clock]);
 
+  useEffect(() => {
+    emptyAnswer();
+  }, []);
+
   const formatTime = (totalSeconds: number): string => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;

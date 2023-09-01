@@ -2,6 +2,9 @@ import React from "react";
 import styles from "@/styles/about.module.css";
 import Image from "next/image";
 import pfp from "@/public/pfp.png";
+import yt from "@/public/yt.svg";
+import dc from "@/public/dc.svg";
+import gh from "@/public/github.svg";
 import { Open_Sans } from "next/font/google";
 const opensans = Open_Sans({ subsets: ["latin"] });
 function About() {
@@ -81,6 +84,104 @@ function About() {
           myself.
         </p>
       </div>
+      <p id="OSIstatement">
+        Solvexr only uses OSI logo at its homepage for showing support for{" "}
+        <a
+          href="https://opensource.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open Source Initiative
+        </a>
+        . Solvexr never claims to combine its name or its creator's name with
+        the OSI name or use the OSI name in a way that it could be perceived
+        that OSI and it has an organizational link such as a joint venture. The
+        OSI logo trademark is the trademark of Open Source Initiative.
+      </p>
+      <div>
+        Used Tools and Libraries:
+        <ul>
+          <li>
+            <a
+              href="https://github.com/facebook/react/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              React
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/vercel/next.js"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              NextJS
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/microsoft/TypeScript"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Typescript
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://mui.com/joy-ui/getting-started/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @mui/Joy UI
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/styled-components/styled-components"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              styled-components
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/kevinsqi/react-circular-progressbar"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              react-circular-progressbar
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/nas5w/use-local-storage"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              use-local-storage
+            </a>
+          </li>
+        </ul>
+      </div>
+      <footer className={styles.socials}>
+        <b>Made by Inharul.</b>
+        <ul>
+          <a href="https://github.com/inharul">
+            <Image src={gh} alt="github" />
+          </a>
+          <a href="https://www.youtube.com/@inharul">
+            <Image src={yt} alt="youtube" />
+          </a>
+          <a href="https://discord.gg/CatZ9nSECb">
+            <Image src={dc} alt="discord" />
+          </a>
+        </ul>
+      </footer>
     </div>
   );
 }

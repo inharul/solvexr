@@ -41,3 +41,24 @@
   padding: 0 3rem;
   font-size: 0.85rem;
 }
+
+/* footer */
+.socials {
+  padding: 4rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.socials a {
+  margin: 0 0.5rem;
+}
+.socials a:hover {
+  opacity: 0.8;
+}
+.socials b {
+  margin-right: 0.8rem;
+  font-weight: 400;
+  font-size: 14px;
+  color: #afafaf;
+}
