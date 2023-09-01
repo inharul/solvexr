@@ -39,7 +39,33 @@
 /* the about paragraph */
 .aboutParagraph {
   padding: 0 3rem;
-  font-size: 0.85rem;
+  font-size: 0.87rem;
+}
+.aboutParagraph p {
+  margin: 0.7rem 0;
+}
+
+/* osi */
+.osiPara {
+  margin: 2rem 3rem 0 3rem;
+  color: #afafaf;
+  font-size: 0.8rem;
+}
+.osiPara a {
+  color: #eee;
+}
+.osiPara a:hover {
+  text-decoration: underline;
+}
+.starButton {
+  margin: 0.8rem 3rem;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  padding: 0.5rem 0.7rem;
+  background-color: #9494943f;
+  width: fit-content;
+  border-radius: 8px;
 }
 
 /* footer */
@@ -59,6 +85,6 @@
 .socials b {
   margin-right: 0.8rem;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   color: #afafaf;
 }
