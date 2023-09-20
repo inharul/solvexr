@@ -42,11 +42,10 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
       division: false,
     }
   );
-
+  const newOperations = Object.keys(operations).filter(
+    (key) => operations[key]
+  );
   const getOperation = (): string => {
-    const newOperations = Object.keys(operations).filter(
-      (key) => operations[key]
-    );
     const randomIndex = Math.floor(Math.random() * newOperations.length);
     const randomKey = newOperations[randomIndex];
 
@@ -76,9 +75,12 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
   };
   const changeOperations = (element: string, newState: boolean) => {
     if (element in operations) {
+      if (newOperations.length == 1 && newState == false) {
+        return;
+      }
       setOperations({ ...operations, [element]: newState });
     } else {
-      console.error("Invalid element");
+      console.error("Error: Request to change state of an invalid Operation");
     }
   };
 
