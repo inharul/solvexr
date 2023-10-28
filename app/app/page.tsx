@@ -27,8 +27,14 @@ import dynamic from "next/dynamic";
 
 const App = () => {
   const { answersList, handleAddAnswer, emptyAnswer } = useAnswers();
-  const { timeControl, numberOneRange, numberTwoRange, getOperation } =
-    useStorage();
+  const {
+    timeControl,
+    numberOneRange,
+    numberTwoRange,
+    getOperation,
+    manualEnabled,
+    maunalNumber,
+  } = useStorage();
 
   const [operation, setOperation] = useState<string>(getOperation());
   const [correctCount, setCorrectCount] = useState(0);
@@ -46,7 +52,7 @@ const App = () => {
     RandomNumber(1, numberOneRange)
   );
   const [numberTwo, setNumberTwo] = useState<number>(
-    RandomNumber(1, numberTwoRange)
+    manualEnabled ? maunalNumber : RandomNumber(1, numberTwoRange)
   );
 
   //Answer
@@ -117,7 +123,9 @@ const App = () => {
 
     setNumberOne(RandomNumber(1, numberOneRange));
     setOperation(getOperation());
-    setNumberTwo(RandomNumber(1, numberTwoRange));
+    setNumberTwo(
+      manualEnabled ? maunalNumber : RandomNumber(1, numberTwoRange)
+    );
 
     setUserAnswer("");
     textareaRef.current?.focus();

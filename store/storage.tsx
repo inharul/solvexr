@@ -11,7 +11,9 @@ export type StorageContext = {
   timeControl: string;
   numberOneRange: number;
   numberTwoRange: number;
-  changeStorage: (key: string, value: string) => void;
+  maunalNumber: number;
+  manualEnabled: boolean;
+  changeStorage: (key: string, value: any) => void;
   changeRanges: (number: number, newValue: string) => void;
   operations: Operations;
   changeOperations: (element: string, newState: boolean) => void;
@@ -32,6 +34,11 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
   const [numberTwoRange, setNumberTwoRange] = useLocalStorage<number>(
     "numberTwo",
     100
+  );
+  const [maunalNumber, setManualNumber] = useLocalStorage("manualValue", 2);
+  const [manualEnabled, setManualEnabled] = useLocalStorage<boolean>(
+    "manual",
+    false
   );
   const [operations, setOperations] = useLocalStorage<Operations>(
     "operations",
@@ -63,9 +70,13 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const changeStorage = (key: string, value: string) => {
+  const changeStorage = (key: string, value: any) => {
     if (key == "timeControl") {
       setTimeControl(value);
+    } else if (key == "manualEnabled") {
+      setManualEnabled(value);
+    } else if (key == "manualNumber") {
+      setManualNumber(value);
     }
   };
   const changeRanges = (number: number, nv: string) => {
@@ -91,6 +102,8 @@ export const StorageProvider = ({ children }: { children: ReactNode }) => {
         timeControl,
         changeStorage,
         numberOneRange,
+        maunalNumber,
+        manualEnabled,
         numberTwoRange,
         changeRanges,
         operations,
