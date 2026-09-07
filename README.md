@@ -1,8 +1,12 @@
 # SolvexR
-> fast, offline-first, installable PWA built with React + Vite.
+### `fast, offline-first, installable PWA for practicing mental maths`
+
 `2.0.X` `PWA`
 
-Practice arithmetic under time pressure. Solve as many sums as you can before the clock runs out — get instant feedback on accuracy, average time, and a full submission log to fix mistakes.
+> Practice arithmetic under time pressure. Solve as many sums as you can before the clock runs out — get instant feedback on accuracy, average time, and a full submission log to fix mistakes.
+
+<img width="1868" height="963" alt="image" src="https://github.com/user-attachments/assets/8997af1f-b411-4039-acb8-4dae8f762405" />
+
 ---
 
 ## Features
