@@ -25,26 +25,26 @@ export function FinishModal({ correctCount, wrongCount, answersList, resetApp }:
   const printOperations = (arr: string[]) => <span>{arr.map(capitalize).join(", ")}</span>;
 
   return (
-    <div className="absolute inset-0 z-50 flex justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="my-8 h-fit max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/10 bg-[#1e1f22] p-6 text-white shadow-xl">
-        <h1 className="text-center text-2xl font-semibold">{messages[Math.floor(Math.random() * messages.length)]}</h1>
+    <div className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/60 p-3 sm:p-4 backdrop-blur-sm">
+      <div className="my-4 sm:my-8 h-fit max-h-[90vh] sm:max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/10 bg-[#1e1f22] p-4 sm:p-6 text-white shadow-xl">
+        <h1 className="text-center text-xl sm:text-2xl font-semibold">{messages[Math.floor(Math.random() * messages.length)]}</h1>
         <Separator className="my-4 bg-white/10" />
-        <div className="grid grid-cols-3 gap-4 py-2">
-          <div className="rounded-xl bg-white/[0.04] p-4 text-center">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 py-2">
+          <div className="rounded-xl bg-white/[0.04] p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center gap-2">
-              <Target size={24} /> <span className="text-lg font-bold">{answersList.length ? `${getAccuracy()}%` : "0%"}</span>
+              <Target size={20} className="sm:h-6 sm:w-6" /> <span className="text-base sm:text-lg font-bold">{answersList.length ? `${getAccuracy()}%` : "0%"}</span>
             </div>
             <p className="mt-1 text-xs text-white/60">Accuracy</p>
           </div>
-          <div className="rounded-xl bg-white/[0.04] p-4 text-center">
+          <div className="rounded-xl bg-white/[0.04] p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center gap-2">
-              <Timer size={24} /> <span className="text-lg font-bold">{answersList.length ? formatTime(averageTime()) : "0:00"}</span>
+              <Timer size={20} className="sm:h-6 sm:w-6" /> <span className="text-base sm:text-lg font-bold">{answersList.length ? formatTime(averageTime()) : "0:00"}</span>
             </div>
             <p className="mt-1 text-xs text-white/60">Average Time</p>
           </div>
-          <div className="rounded-xl bg-white/[0.04] p-4 text-center">
+          <div className="rounded-xl bg-white/[0.04] p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center gap-2">
-              <ListChecks size={24} /> <span className="text-lg font-bold">{correctCount}</span>
+              <ListChecks size={20} className="sm:h-6 sm:w-6" /> <span className="text-base sm:text-lg font-bold">{correctCount}</span>
             </div>
             <p className="mt-1 text-xs text-white/60">out of {answersList.length}</p>
           </div>
@@ -57,26 +57,26 @@ export function FinishModal({ correctCount, wrongCount, answersList, resetApp }:
             ["Wrong answers", wrongCount],
             ["Total Submissions", answersList.length],
           ].map(([k, v]) => (
-            <div key={String(k)} className="flex items-center justify-between px-4 py-3 text-sm">
-              <span className="text-white/60">{k as string}</span>
-              <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${k === "Correct answers" ? "bg-[#23a559] text-white" : k === "Wrong answers" ? "bg-red-500 text-white" : "bg-white/10 text-white"}`}>{v as any}</span>
+            <div key={String(k)} className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 text-sm">
+              <span className="text-white/60 text-xs sm:text-sm shrink">{k as string}</span>
+              <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${k === "Correct answers" ? "bg-[#23a559] text-white" : k === "Wrong answers" ? "bg-red-500 text-white" : "bg-white/10 text-white"}`}>{v as any}</span>
             </div>
           ))}
         </div>
-        <div className="mt-6 grid grid-cols-3 gap-3">
+        <button
+          type="button"
+          onClick={resetApp}
+          className="learn-more-teal mt-6 flex w-full items-center justify-center !rounded-[0.75em] text-center mb-6 sm:mb-8"
+        >
+          RESET
+        </button>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Link
             to="/settings"
             className="inline-flex h-full w-full items-center justify-center gap-2 rounded-[0.75em] border-2 border-white/10 bg-white/[0.06] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
           >
             <Gear size={18} weight="bold" /> Settings
           </Link>
-          <button
-            type="button"
-            onClick={resetApp}
-            className="learn-more-teal flex h-full w-full items-center justify-center !rounded-[0.75em] text-center"
-          >
-            RESET
-          </button>
           <button
             type="button"
             onClick={() => setShowAnswers(!showAnswers)}
@@ -90,12 +90,12 @@ export function FinishModal({ correctCount, wrongCount, answersList, resetApp }:
             <div className="bg-white/5 px-4 py-2 text-center text-sm font-medium">Your Submitted Answers</div>
             {answersList.length ? (
               answersList.map((a) => (
-                <div key={a.id} className="flex items-center justify-between border-t border-white/5 px-4 py-2.5 text-sm">
-                  <span className="flex items-center gap-2">
-                    {a.correct ? <CheckCircle size={18} weight="fill" className="text-emerald-500" /> : <XCircle size={18} weight="fill" className="text-red-500" />}
-                    {a.userAnswer}
+                <div key={a.id} className="flex items-center justify-between gap-2 border-t border-white/5 px-4 py-2.5 text-sm">
+                  <span className="flex min-w-0 items-center gap-2">
+                    {a.correct ? <CheckCircle size={18} weight="fill" className="shrink-0 text-emerald-500" /> : <XCircle size={18} weight="fill" className="shrink-0 text-red-500" />}
+                    <span className="truncate">{a.userAnswer}</span>
                   </span>
-                  <span className="text-xs text-white/50">{formatTime(a.timeTaken)}</span>
+                  <span className="shrink-0 text-xs text-white/50">{formatTime(a.timeTaken)}</span>
                 </div>
               ))
             ) : (

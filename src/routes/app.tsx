@@ -88,51 +88,140 @@ function Practice() {
     setIsRunning(true);
   };
 
+  const [showHistory, setShowHistory] = useState(true);
+  const [showMobileHistory, setShowMobileHistory] = useState(false);
+  const lastAnswer = answersList.length > 0 ? answersList[0] : null;
+
   return (
-    <div className="flex w-full">
+    <div className="flex min-h-[calc(100vh-3.5rem)] w-full flex-col lg:flex-row">
       {clock === 0 ? <FinishModal correctCount={correctCount} wrongCount={wrongCount} answersList={answersList} resetApp={resetApp} /> : null}
-      <div className="h-[calc(100vh-3rem)] w-[23%] min-w-55 overflow-y-auto border-r border-solid border-[#6c6c6cee] p-4">
-        <div className="flex items-center rounded-[10px] border-[1.4px] border-dashed border-(--border-color) bg-[#eee0] p-2 text-[#b2b2b2]">
-          <div style={{ width: 30, height: 30 }}>
+
+      {/* Mobile minimal header - clock + last answer check only */}
+      <div className="flex w-full items-center justify-between gap-2 border-b border-[#6c6c6cee] bg-[#101215] px-3 py-2.5 lg:hidden">
+        <div className="flex items-center gap-2 shrink-0">
+          <div style={{ width: 28, height: 28 }} className="shrink-0">
             <CircularProgressbar value={(clock * 100) / (parseInt(timeControl) * 60)} counterClockwise styles={buildStyles({ strokeLinecap: "butt", pathColor: "#079697" })} strokeWidth={50} />
           </div>
-          <h3 className="ml-2 text-base font-medium">{formatTime(clock)}</h3>
+          <span className="text-sm font-medium tracking-tight">{formatTime(clock)}</span>
         </div>
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+          {lastAnswer ? (
+            <div className="flex min-w-0 items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-xs">
+              {lastAnswer.correct ? <CheckCircleIcon size={16} weight="fill" color="#62a941" className="shrink-0" /> : <XCircleIcon size={16} weight="fill" color="#a63e3e" className="shrink-0" />}
+              <span className="truncate max-w-[38vw] font-light tracking-tight">{lastAnswer.userAnswer}</span>
+            </div>
+          ) : (
+            <span className=" hidden sm:inline text-xs text-white/30">no answers yet</span>
+          )}
+          {answersList.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowMobileHistory(true)}
+              className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/15 active:scale-95"
+            >
+              Show all
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile history sheet */}
+      {showMobileHistory && (
+        <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/60 p-3 backdrop-blur-sm lg:hidden" onClick={() => setShowMobileHistory(false)}>
+          <div onClick={(e) => e.stopPropagation()} className="max-h-[70vh] w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#1e1f22] shadow-xl flex flex-col">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+              <div className="text-sm font-medium">Answers</div>
+              <button type="button" onClick={() => setShowMobileHistory(false)} className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/15">Close</button>
+            </div>
+            <div className="flex-1 overflow-y-auto divide-y divide-white/5">
+              {answersList.map((a) => (
+                <div key={a.id} className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm">
+                  <span className="flex min-w-0 items-center gap-2">
+                    {a.correct ? <CheckCircleIcon size={16} weight="fill" color="#62a941" className="shrink-0" /> : <XCircleIcon size={16} weight="fill" color="#a63e3e" className="shrink-0" />}
+                    <span className="truncate font-light">{a.userAnswer}</span>
+                  </span>
+                  <span className="shrink-0 text-xs text-white/40">{formatTime(a.timeTaken)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Sidebar - hidden on mobile to keep screen focused on calculation */}
+      <div className="hidden lg:flex lg:flex-col lg:h-[calc(100vh-3.5rem)] lg:w-[300px] lg:min-w-[300px] xl:w-[340px] xl:min-w-[340px] lg:overflow-y-auto lg:border-r lg:border-[#6c6c6cee] bg-[#101215] p-4 shrink-0">
+        <div className="flex items-center justify-between gap-2 rounded-[10px] border-[1.4px] border-dashed border-(--border-color) bg-[#eee0] p-2 text-[#b2b2b2]">
+          <div className="flex items-center">
+            <div style={{ width: 30, height: 30 }} className="shrink-0">
+              <CircularProgressbar value={(clock * 100) / (parseInt(timeControl) * 60)} counterClockwise styles={buildStyles({ strokeLinecap: "butt", pathColor: "#079697" })} strokeWidth={50} />
+            </div>
+            <h3 className="ml-2 text-sm font-medium sm:text-base">{formatTime(clock)}</h3>
+          </div>
+          <span className="text-xs text-white/40">time left</span>
+        </div>
+
         {answersList.length > 0 && (
-          <div className="mt-2 rounded-[10px] border-[1.4px] border-dashed border-(--border-color)">
-            <div className="flex items-center justify-center rounded-t-[10px] bg-[#80808078] p-[0.3rem] text-[0.8rem]">
-              <p className="mr-4">Answers</p>
-              <i className="mx-0.5 rounded-[5px] bg-[#62a941] px-1.5 py-0 font-bold not-italic text-white">{correctCount}</i>
-              <i className="mx-0.5 rounded-[5px] bg-[#a63e3e] px-1.5 py-0 font-bold not-italic text-white">{wrongCount}</i>
-              <b className="ml-px rounded-[5px] text-white">/ {answersList.length}</b>
+          <div className="mt-3 flex items-center justify-between rounded-lg bg-white/[0.04] px-3 py-2 text-xs">
+            <span className="text-white/60">Progress</span>
+            <span className="flex items-center gap-1">
+              <i className="rounded-[5px] bg-[#62a941] px-1.5 py-0.5 font-bold not-italic text-white">{correctCount}</i>
+              <i className="rounded-[5px] bg-[#a63e3e] px-1.5 py-0.5 font-bold not-italic text-white">{wrongCount}</i>
+              <b className="ml-1 text-white">/ {answersList.length}</b>
+            </span>
+          </div>
+        )}
+
+        {answersList.length > 0 && (
+          <div className={`${showHistory ? "block" : "hidden"} lg:block mt-3 rounded-[10px] border-[1.4px] border-dashed border-(--border-color) max-h-[32vh] overflow-y-auto lg:max-h-none lg:overflow-visible`}>
+            <div className="sticky top-0 flex items-center justify-center rounded-t-[10px] bg-[#80808078] p-[0.4rem] text-[0.8rem] backdrop-blur">
+              <p>Answers</p>
             </div>
             {answersList.map((a) => (
-              <div key={a.id} className="flex items-center justify-between border-t border-dashed border-(--border-color) p-[0.3rem]">
-                <div className="flex items-center">
-                  {a.correct ? <CheckCircleIcon size={20} weight="fill" color="#62a941" className="mr-1.25" /> : <XCircleIcon size={20} weight="fill" color="#a63e3e" className="mr-1.25" />}
-                  <h4 className="text-[0.85rem] font-light">{a.userAnswer}</h4>
+              <div key={a.id} className="flex items-center justify-between gap-2 border-t border-dashed border-(--border-color) p-2 sm:p-[0.4rem]">
+                <div className="flex min-w-0 items-center">
+                  {a.correct ? <CheckCircleIcon size={18} weight="fill" color="#62a941" className="mr-1.5 shrink-0 sm:mr-1.25" /> : <XCircleIcon size={18} weight="fill" color="#a63e3e" className="mr-1.5 shrink-0 sm:mr-1.25" />}
+                  <h4 className="truncate text-[0.8rem] font-light sm:text-[0.85rem]">{a.userAnswer}</h4>
                 </div>
-                <p className="text-[0.8rem] text-gray-500">{formatTime(a.timeTaken)}</p>
+                <p className="shrink-0 text-[0.75rem] text-gray-500 sm:text-[0.8rem]">{formatTime(a.timeTaken)}</p>
               </div>
             ))}
           </div>
         )}
+        {answersList.length > 0 && (
+          <button type="button" onClick={() => setShowHistory((v) => !v)} className="mt-2 text-xs text-white/40 hover:text-white/60 lg:hidden">Toggle history</button>
+        )}
       </div>
-      <div className="h-full flex-1 px-12 py-4">
-        <div className="flex items-center justify-end">
-          <h3 className="mr-1.5 text-base font-normal">{formatTime(time)}</h3>
-          <TimerIcon size={30} />
+
+      {/* Main game area - only main content on mobile */}
+      <div className="flex flex-1 flex-col px-4 py-4 sm:px-6 sm:py-6 lg:px-8 xl:px-12">
+        {/* per-question timer - desktop only, hidden on mobile for minimalism */}
+        <div className="hidden lg:flex items-center justify-end gap-1.5">
+          <h3 className="text-sm font-normal sm:text-base">{formatTime(time)}</h3>
+          <TimerIcon size={24} className="sm:h-[30px] sm:w-[30px]" />
         </div>
-        <div className="mt-16 flex justify-center">
-          <div className="font-flex font-weight-600 text-8xl font-round-full">
-            <div className="relative flex w-80 justify-center border-b-[3px] border-dashed border-(--border-color)">
-              <h2 className="absolute bottom-0 left-0 text-[3rem] leading-none text-(--border-color)">{formatOperation(operation)}</h2>
+        <div className="flex flex-1 items-center justify-center py-6 sm:py-8 lg:py-10">
+          <div className="font-flex w-full max-w-[20rem] font-round-full text-[2.75rem] font-semibold leading-none min-[360px]:text-[3.25rem] sm:max-w-[22rem] sm:text-[4.5rem] md:text-[5.5rem] lg:max-w-[24rem] lg:text-[6rem] xl:max-w-[20rem] xl:text-8xl">
+            <div className="relative flex w-full justify-center border-b-[3px] border-dashed border-(--border-color) pb-1 sm:pb-2">
+              <h2 className="absolute bottom-1 left-1 text-[1.5rem] leading-none text-(--border-color) sm:bottom-1.5 sm:text-[2rem] lg:text-[2.5rem] xl:text-[3rem]">{formatOperation(operation)}</h2>
               <div className="text-right">
-                <h1 className="leading-none">{numberOne}</h1>
-                <h1 className="leading-none">{numberTwo}</h1>
+                <h1 className="leading-none tracking-tight">{numberOne}</h1>
+                <h1 className="leading-none tracking-tight">{numberTwo}</h1>
               </div>
             </div>
-            <input ref={inputRef} name="answer" autoFocus value={userAnswer} type="number" onChange={(e) => setUserAnswer(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(e); }} disabled={clock === 0} className="my-4 w-80 overflow-hidden rounded-lg border-none bg-transparent px-4 py-0 text-center font-bold leading-none outline-none placeholder:text-muted-foreground" />
+            <input
+              ref={inputRef}
+              name="answer"
+              autoFocus
+              value={userAnswer}
+              type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="—"
+              onChange={(e) => setUserAnswer(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(e); }}
+              disabled={clock === 0}
+              className="my-3 w-full overflow-hidden rounded-lg border-none bg-transparent px-2 py-2 text-center text-[2.5rem] font-bold leading-none outline-none placeholder:text-white/20 focus-visible:ring-0 sm:my-4 sm:px-4 sm:text-[3rem] md:text-[3.5rem] lg:text-[4rem] xl:text-[3.75rem]"
+            />
           </div>
         </div>
       </div>
