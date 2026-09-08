@@ -13,6 +13,9 @@ export function Header() {
             <Link to="/">/home</Link>
           </li>
           <li className="mx-7 text-[15px] hover:underline">
+            <Link to="/journeys">/journeys</Link>
+          </li>
+          <li className="mx-7 text-[15px] hover:underline">
             <Link to="/about">/about</Link>
           </li>
         </ul>
