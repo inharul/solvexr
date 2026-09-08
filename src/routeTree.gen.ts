@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as JourneysIndexRouteImport } from './routes/journeys/index'
+import { Route as JourneysNodeIdRouteImport } from './routes/journeys/$nodeId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +36,32 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JourneysIndexRoute = JourneysIndexRouteImport.update({
+  id: '/journeys/',
+  path: '/journeys/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JourneysNodeIdRoute = JourneysNodeIdRouteImport.update({
+  id: '/journeys/$nodeId',
+  path: '/journeys/$nodeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRoute
   '/settings': typeof SettingsRoute
+  '/journeys/$nodeId': typeof JourneysNodeIdRoute
+  '/journeys/': typeof JourneysIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/app': typeof AppRoute
   '/settings': typeof SettingsRoute
+  '/journeys/$nodeId': typeof JourneysNodeIdRoute
+  '/journeys': typeof JourneysIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +69,23 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/app': typeof AppRoute
   '/settings': typeof SettingsRoute
+  '/journeys/$nodeId': typeof JourneysNodeIdRoute
+  '/journeys/': typeof JourneysIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/app' | '/settings'
+  fullPaths:
+    '/' | '/about' | '/app' | '/settings' | '/journeys/$nodeId' | '/journeys/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/app' | '/settings'
-  id: '__root__' | '/' | '/about' | '/app' | '/settings'
+  to: '/' | '/about' | '/app' | '/settings' | '/journeys/$nodeId' | '/journeys'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/app'
+    | '/settings'
+    | '/journeys/$nodeId'
+    | '/journeys/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +93,8 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AppRoute: typeof AppRoute
   SettingsRoute: typeof SettingsRoute
+  JourneysNodeIdRoute: typeof JourneysNodeIdRoute
+  JourneysIndexRoute: typeof JourneysIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +127,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journeys/': {
+      id: '/journeys/'
+      path: '/journeys'
+      fullPath: '/journeys/'
+      preLoaderRoute: typeof JourneysIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journeys/$nodeId': {
+      id: '/journeys/$nodeId'
+      path: '/journeys/$nodeId'
+      fullPath: '/journeys/$nodeId'
+      preLoaderRoute: typeof JourneysNodeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +149,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AppRoute: AppRoute,
   SettingsRoute: SettingsRoute,
+  JourneysNodeIdRoute: JourneysNodeIdRoute,
+  JourneysIndexRoute: JourneysIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
