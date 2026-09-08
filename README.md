@@ -6,6 +6,7 @@
 > Practice arithmetic under time pressure. Solve as many sums as you can before the clock runs out — get instant feedback on accuracy, average time, and a full submission log to fix mistakes.
 
 <img width="1868" height="963" alt="image" src="https://github.com/user-attachments/assets/8997af1f-b411-4039-acb8-4dae8f762405" />
+<img width="1865" height="1033" alt="image" src="https://github.com/user-attachments/assets/16fa9ffe-caf1-4eee-8b46-3181c9e1d5b5" />
 
 ---
 
