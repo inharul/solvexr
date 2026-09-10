@@ -28,12 +28,11 @@ function About() {
         <p className="my-3">I fear if I don't develop these skills, I'm risking my dreams. I have never taken a formal Computer Science class, but I really wish to. The chances of me being able to take one in future will decrease if I continue remaining the same down this path. Perhaps that person was right, and even though it hurt the first time hearing it, I hold those words close to my heart. I need to remember these words and work on myself to be deserving of my dreams. For that, I have to fix my flaws, one at a time, beginning with proving these sentences wrong one day.</p>
         <p className="my-3">This is just a tool for myself to make significant progress on it. There are so many things I have to juggle at the same time. Nevertheless, if you wish to use this as a game, way to pass the time, or anything, feel free to do so. At the end, I know I can't be perfect, but people close to me deserve a better version of me. I can't say they deserve a better person and push them away, because I want their presence forever with me. Then looks like the only option is to be that better person that I wish them to have. Wish me luck and I wish you luck too. Hope this project helps you as I'm hoping it will to me.</p>
       </div>
-      <p className="mx-4 mt-8 text-[0.8rem] text-[#afafaf] sm:mx-8 lg:mx-12">
-        Solvexr only uses OSI logo at its homepage for showing support for <a href="https://opensource.org/" target="_blank" rel="noopener noreferrer" className="text-[#eee] hover:underline">Open Source Initiative</a>. Solvexr, itself is an open source project. Thus, rather using the logo to indicate it is one of the projects contributing to the open source community as well as making people aware of the initiative. Solvexr never claims to combine its name or its creator&apos;s name with the OSI name or use the OSI name in a way that it could be perceived that OSI and it has an organizational link such as a joint venture. The OSI logo trademark is the trademark of Open Source Initiative.
-      </p>
-      <a href="https://github.com/inharul/solvexr" className="mx-4 mt-3 inline-flex w-fit items-center rounded-lg bg-[#9494943f] px-3 py-2 text-[13px] sm:mx-8 lg:mx-12">
-        <img src="/github.svg" alt="star on github" width={20} height={20} className="mr-1 h-5 w-5" /> View it on Github
-      </a>
+      <div className="flex justify-center mt-8">
+        <a href="https://github.com/inharul/solvexr" className="inline-flex items-center rounded-lg bg-[#9494943f] px-3 py-2 text-[13px]">
+          <img src="/github.svg" alt="star on github" width={20} height={20} className="mr-1 h-5 w-5" /> View it on Github
+        </a>
+      </div>
       <footer className="flex w-full flex-wrap items-center justify-center gap-2 px-4 py-10 sm:py-16">
         <b className="mr-3 text-[13px] font-normal text-[#afafaf]">Made by Inharul.</b>
         <a href="https://github.com/inharul" className="mx-2 hover:opacity-80"><img src="/github.svg" alt="github" width={22} height={22} /></a>

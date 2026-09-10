@@ -12,7 +12,7 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-3 md:flex">
           <li className="text-[15px]">
             <Link to="/" className="rounded-full px-3 py-1.5 hover:bg-white/10 hover:no-underline [&.active]:bg-white [&.active]:!text-black [&.active]:font-semibold">
               /home
