@@ -14,6 +14,9 @@ dev-dist
 dist-ssr
 *.local
 
+# animation plans (do not commit)
+plans/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

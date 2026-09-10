@@ -46,40 +46,46 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      {open && (
-        <div className="border-t border-white/10 bg-[#1e1f22] px-4 py-3 md:hidden">
-          <ul className="flex flex-col gap-1">
-            <li>
-              <Link
-                to="/"
-                onClick={() => setOpen(false)}
-                className="flex w-full rounded-lg px-3 py-2.5 text-[15px] font-medium hover:bg-white/10 [&.active]:bg-white [&.active]:!text-black"
-              >
-                /home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/journeys"
-                onClick={() => setOpen(false)}
-                className="flex w-full rounded-lg px-3 py-2.5 text-[15px] font-medium hover:bg-white/10 [&.active]:bg-white [&.active]:!text-black"
-              >
-                /journeys
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/about"
-                onClick={() => setOpen(false)}
-                className="flex w-full rounded-lg px-3 py-2.5 text-[15px] font-medium hover:bg-white/10 [&.active]:bg-white [&.active]:!text-black"
-              >
-                /about
-              </Link>
-            </li>
-          </ul>
+      {/* Mobile menu - animated disclosure */}
+      <div
+        data-open={open}
+        className="grid grid-rows-[0fr] opacity-0 -translate-y-2 transition-[grid-template-rows,opacity,transform] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] data-[open=true]:grid-rows-[1fr] data-[open=true]:opacity-100 data-[open=true]:translate-y-0 md:hidden"
+        aria-hidden={!open}
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-white/10 bg-[#1e1f22] px-4 py-3">
+            <ul className="flex flex-col gap-1">
+              <li>
+                <Link
+                  to="/"
+                  onClick={() => setOpen(false)}
+                  className="flex w-full rounded-lg px-3 py-2.5 text-[15px] font-medium hover:bg-white/10 [&.active]:bg-white [&.active]:!text-black"
+                >
+                  /home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/journeys"
+                  onClick={() => setOpen(false)}
+                  className="flex w-full rounded-lg px-3 py-2.5 text-[15px] font-medium hover:bg-white/10 [&.active]:bg-white [&.active]:!text-black"
+                >
+                  /journeys
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  onClick={() => setOpen(false)}
+                  className="flex w-full rounded-lg px-3 py-2.5 text-[15px] font-medium hover:bg-white/10 [&.active]:bg-white [&.active]:!text-black"
+                >
+                  /about
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }

@@ -12,6 +12,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { CheckCircle, XCircle, TimerIcon, Lock, ArrowLeft, Target, Trophy } from "@phosphor-icons/react";
 import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 export const Route = createFileRoute("/journeys/$nodeId")({
   component: JourneyPractice,
@@ -225,6 +226,8 @@ function JourneySession({ node, stats, timeControl, answersList, addAnswer, clea
     setNumberTwo(next.b);
   };
 
+  useKeyboardShortcuts(undefined, resetApp, { skipNavigation: true });
+
   const handleFinishEarly = () => {
     setShowResult(true);
     setIsRunning(false);
@@ -246,11 +249,32 @@ function JourneySession({ node, stats, timeControl, answersList, addAnswer, clea
   const [showMobileHistory, setShowMobileHistory] = useState(false);
   const lastAnswer = answersList.length > 0 ? answersList[0] : null;
 
+  // Modal enter/exit animation (001)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMounted, setModalMounted] = useState(showResult);
+  useEffect(() => {
+    if (showResult) {
+      setModalMounted(true);
+      const id = requestAnimationFrame(() => requestAnimationFrame(() => setModalOpen(true)));
+      return () => cancelAnimationFrame(id);
+    } else {
+      setModalOpen(false);
+      const t = setTimeout(() => setModalMounted(false), 280);
+      return () => clearTimeout(t);
+    }
+  }, [showResult]);
+
   return (
     <div className="flex min-h-[calc(100vh-3.5rem)] w-full flex-col lg:flex-row">
-      {showResult && (
-        <div className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/60 p-3 sm:p-4 backdrop-blur-sm">
-          <div className="my-4 sm:my-8 h-fit max-h-[90vh] sm:max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/10 bg-[#1e1f22] p-4 sm:p-6 text-white shadow-xl">
+      {modalMounted && (
+        <div
+          data-open={modalOpen}
+          className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/60 p-3 sm:p-4 backdrop-blur-sm transition-opacity duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 data-[open=true]:opacity-100"
+        >
+          <div
+            data-open={modalOpen}
+            className="my-4 sm:my-8 h-fit max-h-[90vh] sm:max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/10 bg-[#1e1f22] p-4 sm:p-6 text-white shadow-xl origin-center transition-[opacity,transform] duration-[280ms] ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 scale-[0.96] translate-y-2 data-[open=true]:opacity-100 data-[open=true]:scale-100 data-[open=true]:translate-y-0"
+          >
             <h1 className="text-center text-xl font-semibold sm:text-2xl">
               {masteredNow ? "Mastered! 🎉" : clock === 0 ? "Time's up!" : "Session complete"}
             </h1>
@@ -372,9 +396,17 @@ function JourneySession({ node, stats, timeControl, answersList, addAnswer, clea
         </div>
       </div>
 
-      {showMobileHistory && (
-        <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/60 p-3 backdrop-blur-sm lg:hidden" onClick={() => setShowMobileHistory(false)}>
-          <div onClick={(e) => e.stopPropagation()} className="max-h-[70vh] w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#1e1f22] shadow-xl flex flex-col">
+      <div
+        data-open={showMobileHistory}
+        className={`fixed inset-0 z-40 flex items-end justify-center bg-black/60 p-3 backdrop-blur-sm lg:hidden transition-opacity duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${showMobileHistory ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        onClick={() => setShowMobileHistory(false)}
+        aria-hidden={!showMobileHistory}
+      >
+        <div
+          data-open={showMobileHistory}
+          onClick={(e) => e.stopPropagation()}
+          className="max-h-[70vh] w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#1e1f22] shadow-xl flex flex-col origin-bottom transition-[opacity,transform] duration-[300ms] ease-[cubic-bezier(0.16,1,0.3,1)] data-[open=true]:opacity-100 data-[open=true]:translate-y-0 data-[open=true]:scale-100 data-[open=false]:opacity-0 data-[open=false]:translate-y-4 data-[open=false]:scale-[0.98]"
+        >
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
               <div className="text-sm font-medium">Answers</div>
               <button type="button" onClick={() => setShowMobileHistory(false)} className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/15">Close</button>
@@ -387,80 +419,83 @@ function JourneySession({ node, stats, timeControl, answersList, addAnswer, clea
                 </div>
               ))}
             </div>
-          </div>
         </div>
-      )}
+      </div>
 
-      {/* Desktop Left sidebar - hidden on mobile for minimalism */}
-      <div className="hidden lg:flex lg:flex-col lg:h-[calc(100vh-3.5rem)] lg:w-[320px] lg:min-w-[320px] xl:w-[360px] xl:min-w-[360px] lg:overflow-y-auto lg:border-r lg:border-[#6c6c6cee] bg-[#101215] p-3 sm:p-4 shrink-0">
-        <Link to="/journeys" className="mb-3 inline-flex items-center gap-1 text-xs text-white/60 hover:text-white">
-          <ArrowLeft size={14} /> Back to Journeys
-        </Link>
-        <Card className="p-3">
-          <div className="text-xs font-medium text-white/60">{node.group} · {node.category}</div>
-          <div className="text-sm font-semibold text-white">{node.title}</div>
-          <div className="mt-1 text-xs leading-relaxed text-[#949ba4]">{node.description}</div>
-          {node.strategyNote && <div className="mt-1 text-[11px] italic text-white/40">{node.strategyNote}</div>}
-        </Card>
+      {/* Desktop Left sidebar - fixed header + scrollable answers */}
+      <div className="hidden lg:flex lg:flex-col lg:h-[calc(100vh-3.5rem)] lg:w-[320px] lg:min-w-[320px] xl:w-[360px] xl:min-w-[360px] lg:border-r lg:border-[#6c6c6cee] bg-[#101215] shrink-0 overflow-hidden">
+        <div className="shrink-0 p-3 sm:p-4 pb-3 space-y-3 overflow-y-auto">
+          <Link to="/journeys" className="inline-flex items-center gap-1 text-xs text-white/60 hover:text-white">
+            <ArrowLeft size={14} /> Back to Journeys
+          </Link>
+          <Card className="p-3">
+            <div className="text-xs font-medium text-white/60">{node.group} · {node.category}</div>
+            <div className="text-sm font-semibold text-white">{node.title}</div>
+            <div className="mt-1 text-xs leading-relaxed text-[#949ba4]">{node.description}</div>
+            {node.strategyNote && <div className="mt-1 text-[11px] italic text-white/40">{node.strategyNote}</div>}
+          </Card>
 
-        <div className="mt-3 flex items-center gap-2 rounded-[10px] border-[1.4px] border-dashed border-(--border-color) bg-[#eee0] p-2 text-[#b2b2b2]">
-          <div style={{ width: 30, height: 30 }} className="shrink-0">
-            <CircularProgressbar value={(clock * 100) / (parseInt(timeControl) * 60)} counterClockwise styles={buildStyles({ strokeLinecap: "butt", pathColor: "#079697" })} strokeWidth={50} />
-          </div>
-          <h3 className="text-sm font-medium sm:text-base">{formatTime(clock)}</h3>
-          <button onClick={handleFinishEarly} className="ml-auto shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white hover:bg-white/15">
-            Finish
-          </button>
-        </div>
-
-        <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
-          <div className="rounded-lg bg-white/[0.04] p-2">
-            <div className="font-bold text-white">{correctCount}</div>
-            <div className="text-white/50">Correct</div>
-          </div>
-          <div className="rounded-lg bg-white/[0.04] p-2">
-            <div className="font-bold text-white">{wrongCount}</div>
-            <div className="text-white/50">Wrong</div>
-          </div>
-          <div className="rounded-lg bg-white/[0.04] p-2">
-            <div className="font-bold text-white">{totalQuestions}</div>
-            <div className="text-white/50">Total</div>
-          </div>
-        </div>
-
-        {stats && (
-          <div className="mt-3 rounded-lg bg-white/[0.04] p-2.5 text-xs">
-            <div className="font-medium text-white/80">Your best</div>
-            <div className="mt-1 flex justify-between text-white/60">
-              <span>Accuracy</span>
-              <span className="font-semibold text-white">{Math.round(stats.bestAccuracy * 100)}%</span>
+          <div className="flex items-center gap-2 rounded-[10px] border-[1.4px] border-dashed border-(--border-color) bg-[#eee0] p-2 text-[#b2b2b2]">
+            <div style={{ width: 30, height: 30 }} className="shrink-0">
+              <CircularProgressbar value={(clock * 100) / (parseInt(timeControl) * 60)} counterClockwise styles={buildStyles({ strokeLinecap: "butt", pathColor: "#079697" })} strokeWidth={50} />
             </div>
-            <div className="flex justify-between text-white/60">
-              <span>Avg</span>
-              <span className="font-semibold text-white">{stats.averageTime ? `${stats.averageTime.toFixed(1)}s` : "—"}</span>
+            <h3 className="text-sm font-medium sm:text-base">{formatTime(clock)}</h3>
+            <button onClick={handleFinishEarly} className="ml-auto shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white hover:bg-white/15">
+              Finish
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 text-center text-xs">
+            <div className="rounded-lg bg-white/[0.04] p-2">
+              <div className="font-bold text-white">{correctCount}</div>
+              <div className="text-white/50">Correct</div>
             </div>
-            <div className="flex justify-between text-white/60">
-              <span>Status</span>
-              <span className={stats.mastered ? "font-semibold text-emerald-400" : "font-semibold text-white/60"}>{stats.mastered ? "Mastered ✓" : `${getProgressPercent(stats)}%`}</span>
+            <div className="rounded-lg bg-white/[0.04] p-2">
+              <div className="font-bold text-white">{wrongCount}</div>
+              <div className="text-white/50">Wrong</div>
+            </div>
+            <div className="rounded-lg bg-white/[0.04] p-2">
+              <div className="font-bold text-white">{totalQuestions}</div>
+              <div className="text-white/50">Total</div>
             </div>
           </div>
-        )}
+
+          {stats && (
+            <div className="rounded-lg bg-white/[0.04] p-2.5 text-xs">
+              <div className="font-medium text-white/80">Your best</div>
+              <div className="mt-1 flex justify-between text-white/60">
+                <span>Accuracy</span>
+                <span className="font-semibold text-white">{Math.round(stats.bestAccuracy * 100)}%</span>
+              </div>
+              <div className="flex justify-between text-white/60">
+                <span>Avg</span>
+                <span className="font-semibold text-white">{stats.averageTime ? `${stats.averageTime.toFixed(1)}s` : "—"}</span>
+              </div>
+              <div className="flex justify-between text-white/60">
+                <span>Status</span>
+                <span className={stats.mastered ? "font-semibold text-emerald-400" : "font-semibold text-white/60"}>{stats.mastered ? "Mastered ✓" : `${getProgressPercent(stats)}%`}</span>
+              </div>
+            </div>
+          )}
+        </div>
 
         {answersList.length > 0 && (
-          <div className="mt-3 rounded-[10px] border-[1.4px] border-dashed border-(--border-color) overflow-hidden">
-            <div className="flex items-center justify-center rounded-t-[10px] bg-[#80808078] p-[0.4rem] text-[0.8rem]">
-              <p>Answers</p>
-            </div>
-            <div className="max-h-[30vh] overflow-y-auto">
-              {answersList.map((a) => (
-                <div key={a.id} className="flex items-center justify-between gap-2 border-t border-dashed border-(--border-color) p-2 sm:p-[0.4rem]">
-                  <div className="flex min-w-0 items-center">
-                    {a.correct ? <CheckCircle size={18} weight="fill" color="#62a941" className="mr-1.5 shrink-0" /> : <XCircle size={18} weight="fill" color="#a63e3e" className="mr-1.5 shrink-0" />}
-                    <h4 className="truncate text-[0.8rem] font-light sm:text-[0.85rem]">{a.userAnswer}</h4>
+          <div className="flex min-h-0 flex-1 flex-col px-3 sm:px-4 pb-4">
+            <div className="flex min-h-0 flex-1 flex-col rounded-[10px] border-[1.4px] border-dashed border-(--border-color) overflow-hidden">
+              <div className="shrink-0 flex items-center justify-center rounded-t-[10px] bg-[#80808078] p-[0.4rem] text-[0.8rem]">
+                <p>Answers</p>
+              </div>
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                {answersList.map((a) => (
+                  <div key={a.id} className="flex items-center justify-between gap-2 border-t border-dashed border-(--border-color) p-2 sm:p-[0.4rem]">
+                    <div className="flex min-w-0 items-center">
+                      {a.correct ? <CheckCircle size={18} weight="fill" color="#62a941" className="mr-1.5 shrink-0" /> : <XCircle size={18} weight="fill" color="#a63e3e" className="mr-1.5 shrink-0" />}
+                      <h4 className="truncate text-[0.8rem] font-light sm:text-[0.85rem]">{a.userAnswer}</h4>
+                    </div>
+                    <p className="shrink-0 text-[0.75rem] text-gray-500 sm:text-[0.8rem]">{formatTime(a.timeTaken)}</p>
                   </div>
-                  <p className="shrink-0 text-[0.75rem] text-gray-500 sm:text-[0.8rem]">{formatTime(a.timeTaken)}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -495,7 +530,7 @@ function JourneySession({ node, stats, timeControl, answersList, addAnswer, clea
                 if (e.key === "Enter") handleSubmit(e);
               }}
               disabled={clock === 0 || showResult}
-              className="my-3 w-full overflow-hidden rounded-lg border-none bg-transparent px-2 py-2 text-center text-[2.5rem] font-bold leading-none outline-none placeholder:text-white/20 focus-visible:ring-0 sm:my-4 sm:px-4 sm:text-[3rem] md:text-[3.5rem] lg:text-[4rem] xl:text-[3.75rem]"
+              className="my-3 w-full overflow-hidden rounded-xl border border-white/10 bg-white/[0.06] px-2 py-3 text-center text-[2.5rem] font-bold leading-none outline-none placeholder:text-white/20 focus-visible:border-white/15 focus-visible:ring-0 sm:my-4 sm:px-4 sm:text-[3rem] md:text-[3.5rem] lg:text-[4rem] xl:text-[3.75rem] disabled:opacity-40"
             />
           </div>
         </div>

@@ -10,6 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { KeyboardIcon, ArrowRightIcon } from "@phosphor-icons/react";
+import { ShortcutsModal } from "@/components/ShortcutsModal";
 
 const RANGE_OPTIONS = ["10", "100", "1000", "10000"];
 const OPERATION_OPTIONS = [
@@ -21,6 +23,7 @@ const OPERATION_OPTIONS = [
 
 function SettingsPage() {
   const [warn, setWarn] = useState("");
+  const [showShortcuts, setShowShortcuts] = useState(false);
   useEffect(() => {
     const t = setInterval(() => setWarn(""), 3000);
     return () => clearInterval(t);
@@ -74,8 +77,8 @@ function SettingsPage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {OPERATION_OPTIONS.map((op) => (
-                    <label key={op.key} htmlFor={`op-${op.key}`} className="inline-flex cursor-pointer items-center overflow-hidden rounded-full bg-white/[0.06] px-3 py-1.5 text-sm font-medium text-[#d1d4d8] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] has-[[data-state=checked]]:bg-white has-[[data-state=checked]]:text-black has-[[data-state=checked]]:gap-1.5 gap-0">
-                      <Checkbox id={`op-${op.key}`} checked={operations[op.key]} onCheckedChange={(c) => changeOperations(op.key, c === true)} className="h-5 shrink-0 overflow-hidden rounded-none border-0 bg-transparent p-0 shadow-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] w-0 opacity-0 -translate-x-1 scale-90 data-[state=checked]:w-5 data-[state=checked]:opacity-100 data-[state=checked]:translate-x-0 data-[state=checked]:scale-100 data-[state=checked]:bg-transparent data-[state=checked]:text-black">
+                    <label key={op.key} htmlFor={`op-${op.key}`} className="inline-flex cursor-pointer items-center overflow-hidden rounded-full bg-white/[0.06] px-3 py-1.5 text-sm font-medium text-[#d1d4d8] transition-[background-color,color,opacity,transform,width,gap] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] has-[[data-state=checked]]:bg-white has-[[data-state=checked]]:text-black has-[[data-state=checked]]:gap-1.5 gap-0">
+                      <Checkbox id={`op-${op.key}`} checked={operations[op.key]} onCheckedChange={(c) => changeOperations(op.key, c === true)} className="h-5 shrink-0 overflow-hidden rounded-none border-0 bg-transparent p-0 shadow-none transition-[opacity,transform,width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] w-0 opacity-0 -translate-x-1 scale-90 data-[state=checked]:w-5 data-[state=checked]:opacity-100 data-[state=checked]:translate-x-0 data-[state=checked]:scale-100 data-[state=checked]:bg-transparent data-[state=checked]:text-black">
                         <span className="text-sm font-bold leading-none text-black">{op.icon}</span>
                       </Checkbox>
                       {op.label}
@@ -127,18 +130,41 @@ function SettingsPage() {
               </div>
               <Switch checked={manualEnabled} onCheckedChange={() => changeStorage("manualEnabled", !manualEnabled)} className="shrink-0 data-[state=checked]:bg-[#23a559] data-[state=unchecked]:bg-white/20" />
             </div>
-            {manualEnabled && (
-              <div className="bg-white/[0.02] p-5">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <input type="text" placeholder={`${maunalNumber}`} defaultValue={manualEnabled ? `${maunalNumber}` : undefined} onInput={(e) => { const target = e.target as HTMLInputElement; const v = target.value.replace(/[^0-9.]/g, "").replace(/[\\.]/g, ""); target.value = v; changeManualValue(v); }} className="h-9 w-full rounded-full border border-white/10 bg-[#2b2d31] px-4 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20 focus:ring-0 sm:w-[180px]" />
-                  <span className="text-sm font-medium text-[#23a559]">{warn}</span>
+            <div
+              data-open={manualEnabled}
+              className="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-[220ms] ease-[cubic-bezier(0.16,1,0.3,1)] data-[open=true]:grid-rows-[1fr] data-[open=true]:opacity-100"
+            >
+              <div className="overflow-hidden">
+                <div className="bg-white/[0.02] p-5">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <input type="text" placeholder={`${maunalNumber}`} defaultValue={manualEnabled ? `${maunalNumber}` : undefined} onInput={(e) => { const target = e.target as HTMLInputElement; const v = target.value.replace(/[^0-9.]/g, "").replace(/[\\.]/g, ""); target.value = v; changeManualValue(v); }} className="h-9 w-full rounded-full border border-white/10 bg-[#2b2d31] px-4 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/20 focus:ring-0 sm:w-[180px]" />
+                    <span className="text-sm font-medium text-[#23a559]">{warn}</span>
+                  </div>
+                  <p className="mt-2 text-xs text-[#949ba4]">Value must be 1–10000. Applied on next problem.</p>
                 </div>
-                <p className="mt-2 text-xs text-[#949ba4]">Value must be 1–10000. Applied on next problem.</p>
               </div>
-            )}
+            </div>
           </div>
         </div>
+
+        <button
+          type="button"
+          onClick={() => setShowShortcuts(true)}
+          className="mt-4 flex w-full items-center justify-between rounded-xl bg-[#1e1f22] px-5 py-4 text-left shadow-sm ring-1 ring-white/[0.06] transition hover:bg-white/[0.04] active:scale-[0.99]"
+        >
+          <span className="flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.06] text-white">
+              <KeyboardIcon size={18} weight="bold" />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-[15px] font-medium leading-5 text-white">Keyboard Shortcuts</span>
+              <span className="text-[13px] leading-4 text-[#949ba4]">View and customize shortcuts — press ? anywhere</span>
+            </span>
+          </span>
+          <ArrowRightIcon size={18} weight="bold" className="shrink-0 text-white/40" />
+        </button>
       </div>
+      <ShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
     </div>
   );
 }

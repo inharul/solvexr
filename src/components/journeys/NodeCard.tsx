@@ -30,7 +30,7 @@ export function NodeCard({ node, stats, locked }: Props) {
   return (
     <Card
       className={cn(
-        "relative flex flex-col p-4 transition",
+        "relative flex flex-col p-4 transition-[border-color,box-shadow,opacity] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]",
         locked
           ? "border border-white/5 opacity-60 ring-white/[0.03]"
           : isMastered
@@ -110,7 +110,7 @@ export function NodeCard({ node, stats, locked }: Props) {
           <Link
             to="/journeys/$nodeId"
             params={{ nodeId: node.id }}
-            className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold !text-white transition hover:bg-emerald-600"
+            className="inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold !text-white transition-[transform,background-color] duration-[120ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:bg-emerald-600 active:scale-[0.98]"
           >
             ✓ Mastered — Practice again
           </Link>
@@ -118,7 +118,7 @@ export function NodeCard({ node, stats, locked }: Props) {
           <Link
             to="/journeys/$nodeId"
             params={{ nodeId: node.id }}
-            className="inline-flex w-full items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold !text-black transition hover:bg-white/90"
+            className="inline-flex w-full items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold !text-black transition-[transform,background-color] duration-[120ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:bg-white/90 active:scale-[0.98]"
           >
             Practice
           </Link>
